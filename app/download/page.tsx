@@ -116,7 +116,7 @@ export default function DownloadPage() {
               arm64 DMG &middot; ~101 MB
             </p>
             <a
-              href="https://github.com/thecodetopg/the-sonaverse/releases/download/v1.0.0/SonaVerse-1.0.0-arm64.dmg"
+              href="https://github.com/thecodetopg/the-sonaverse/releases/download/v1.1.0/SonaVerse-1.1.0-arm64.dmg"
               className="inline-flex items-center gap-2 rounded-lg px-7 py-3 text-sm font-semibold transition-shadow"
               style={{
                 background: "#7500f2",
@@ -171,7 +171,7 @@ export default function DownloadPage() {
               x64 DMG &middot; ~106 MB
             </p>
             <a
-              href="https://github.com/thecodetopg/the-sonaverse/releases/download/v1.0.0/SonaVerse-1.0.0.dmg"
+              href="https://github.com/thecodetopg/the-sonaverse/releases/download/v1.1.0/SonaVerse-1.1.0.dmg"
               className="inline-flex items-center gap-2 rounded-lg px-7 py-3 text-sm font-semibold transition-shadow"
               style={{
                 background: "#7500f2",
