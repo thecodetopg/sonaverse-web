@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sonaverse.vercel.app/sitemap.xml

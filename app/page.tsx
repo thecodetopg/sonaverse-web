@@ -1,3 +1,14 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+const sectionAnim = {
+  initial: { opacity: 0, y: 30 } as const,
+  whileInView: { opacity: 1, y: 0 } as const,
+  transition: { duration: 0.7, ease: "easeOut" as const },
+  viewport: { once: true, margin: "-80px" },
+};
+
 export default function Home() {
   const plugins = [
     {
@@ -75,6 +86,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" style={{ background: "#05000f", color: "#e8e0f5" }}>
+      {/* Shimmer keyframe */}
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          50% { background-position: 0% 0; }
+          100% { background-position: 200% 0; }
+        }
+      `}</style>
 
       {/* Nav */}
       <nav
@@ -87,20 +106,38 @@ export default function Home() {
         }}
       >
         <div className="flex items-center gap-2">
-          <div
-            className="h-6 w-6 rounded-md"
-            style={{ background: "linear-gradient(135deg, #a855f7, #7500f2)" }}
-          />
+          {/* Ether Sphere Logo */}
+          <svg viewBox="0 0 32 32" className="h-7 w-7">
+            <defs>
+              <radialGradient id="sphere-grad" cx="38%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="#c084fc" />
+                <stop offset="50%" stopColor="#7500f2" />
+                <stop offset="100%" stopColor="#2d004f" />
+              </radialGradient>
+              <radialGradient id="sphere-highlight" cx="30%" cy="25%" r="40%">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.5)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+              </radialGradient>
+              <filter id="sphere-glow">
+                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="url(#sphere-grad)" filter="url(#sphere-glow)" />
+            <circle cx="16" cy="16" r="14" fill="url(#sphere-highlight)" />
+            <ellipse cx="16" cy="16" rx="14" ry="5" fill="none" stroke="rgba(192,132,252,0.2)" strokeWidth="0.5" />
+            <ellipse cx="16" cy="16" rx="5" ry="14" fill="none" stroke="rgba(192,132,252,0.15)" strokeWidth="0.5" />
+          </svg>
           <span className="text-lg font-semibold" style={{ color: "#f0ecff", letterSpacing: "-0.025em" }}>
             SonaVerse
           </span>
         </div>
         <div className="flex items-center gap-4">
-          <a href="#plugins" className="hidden text-sm sm:block" style={{ color: "#9490a8" }}>Plugins</a>
-          <a href="#how-it-works" className="hidden text-sm sm:block" style={{ color: "#9490a8" }}>How it works</a>
+          <a href="#plugins" className="hidden text-sm sm:block hover:text-[#c084fc] transition-colors" style={{ color: "#9490a8" }}>Plugins</a>
+          <a href="#how-it-works" className="hidden text-sm sm:block hover:text-[#c084fc] transition-colors" style={{ color: "#9490a8" }}>How it works</a>
           <a
             href="/download"
-            className="rounded-lg px-5 py-2 text-sm font-medium"
+            className="rounded-lg px-5 py-2 text-sm font-medium hover:scale-[1.03] active:scale-[0.98] transition-transform"
             style={{ background: "#7500f2", color: "#fff", boxShadow: "0 0 16px rgba(117,0,242,0.35)" }}
           >
             Download
@@ -109,10 +146,15 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-24 text-center md:pt-36 md:pb-32">
-        {/* Ambient glow */}
-        <div
-          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[900px] rounded-full opacity-20 blur-3xl"
+      <motion.section
+        {...sectionAnim}
+        className="relative flex flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-24 text-center md:pt-36 md:pb-32"
+      >
+        {/* Ambient glow — pulsing */}
+        <motion.div
+          animate={{ scale: [1, 1.12, 1], opacity: [0.2, 0.28, 0.2] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[900px] rounded-full blur-3xl"
           style={{ background: "radial-gradient(ellipse, #7500f2 0%, transparent 70%)" }}
         />
         <div
@@ -127,7 +169,15 @@ export default function Home() {
         >
           Your Creative
           <br />
-          <span style={{ background: "linear-gradient(135deg, #c084fc 0%, #7500f2 70%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <span
+            style={{
+              background: "linear-gradient(135deg, #c084fc 0%, #7500f2 40%, #c084fc 80%)",
+              backgroundSize: "200% 100%",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              animation: "shimmer 3s ease-in-out infinite",
+            }}
+          >
             Toolkit
           </span>
         </h1>
@@ -138,7 +188,7 @@ export default function Home() {
         <div className="relative flex flex-col items-center gap-4 sm:flex-row">
           <a
             href="/download"
-            className="flex items-center gap-2 rounded-lg px-8 py-3 text-sm font-semibold"
+            className="flex items-center gap-2 rounded-lg px-8 py-3 text-sm font-semibold hover:scale-[1.03] active:scale-[0.98] transition-transform"
             style={{ background: "#7500f2", color: "#fff", boxShadow: "0 0 28px rgba(117,0,242,0.45)" }}
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
@@ -148,16 +198,16 @@ export default function Home() {
           </a>
           <a
             href="#plugins"
-            className="rounded-lg px-8 py-3 text-sm font-medium"
+            className="rounded-lg px-8 py-3 text-sm font-medium hover:scale-[1.03] active:scale-[0.98] transition-transform"
             style={{ color: "#c4b8e8", border: "1px solid rgba(168,85,247,0.22)", background: "transparent" }}
           >
             Browse Plugins
           </a>
         </div>
-      </section>
+      </motion.section>
 
       {/* Plugins grid */}
-      <section id="plugins" className="px-6 pb-24 md:px-12 lg:px-24">
+      <motion.section {...sectionAnim} id="plugins" className="px-6 pb-24 md:px-12 lg:px-24">
         <div className="mx-auto max-w-5xl">
           <h2
             className="mb-3 text-center text-xs font-semibold uppercase tracking-widest"
@@ -169,9 +219,18 @@ export default function Home() {
             Every tool you need in the studio
           </p>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {plugins.map((plugin) => (
-              <div
+            {plugins.map((plugin, index) => (
+              <motion.div
                 key={plugin.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut", delay: index * 0.1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                whileHover={{
+                  y: -4,
+                  borderColor: "rgba(168,85,247,0.45)",
+                  boxShadow: "0 8px 30px rgba(117,0,242,0.2)",
+                }}
                 className="group relative rounded-xl p-6 transition-all duration-200"
                 style={{
                   background: "rgba(255,255,255,0.03)",
@@ -197,14 +256,14 @@ export default function Home() {
                 <p className="text-sm leading-relaxed" style={{ color: "#9490a8" }}>
                   {plugin.tagline}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Features row */}
-      <section className="px-6 pb-24 md:px-12 lg:px-24">
+      <motion.section {...sectionAnim} className="px-6 pb-24 md:px-12 lg:px-24">
         <div
           className="mx-auto max-w-5xl rounded-2xl px-8 py-12"
           style={{ background: "rgba(117,0,242,0.06)", border: "1px solid rgba(117,0,242,0.15)" }}
@@ -253,10 +312,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* How it works */}
-      <section id="how-it-works" className="px-6 pb-24 md:px-12 lg:px-24">
+      <motion.section {...sectionAnim} id="how-it-works" className="px-6 pb-24 md:px-12 lg:px-24">
         <div className="mx-auto max-w-5xl">
           <p className="mb-2 text-center text-xs font-semibold uppercase tracking-widest" style={{ color: "#7500f2" }}>
             Getting Started
@@ -306,10 +365,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Download CTA */}
-      <section className="px-6 pb-28 md:px-12 lg:px-24">
+      <motion.section {...sectionAnim} className="px-6 pb-28 md:px-12 lg:px-24">
         <div
           className="mx-auto max-w-2xl rounded-2xl px-8 py-14 text-center"
           style={{ background: "rgba(117,0,242,0.07)", border: "1px solid rgba(117,0,242,0.18)" }}
@@ -325,7 +384,7 @@ export default function Home() {
           </p>
           <a
             href="/download"
-            className="inline-flex items-center gap-2 rounded-lg px-8 py-3 text-sm font-semibold"
+            className="inline-flex items-center gap-2 rounded-lg px-8 py-3 text-sm font-semibold hover:scale-[1.03] active:scale-[0.98] transition-transform"
             style={{ background: "#7500f2", color: "#fff", boxShadow: "0 0 28px rgba(117,0,242,0.4)" }}
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
@@ -337,14 +396,21 @@ export default function Home() {
             macOS 12 Monterey or later · Apple Silicon &amp; Intel · Free download
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer
-        className="px-6 py-8 text-center text-xs"
+        className="px-6 py-8 text-xs"
         style={{ color: "#5a5470", borderTop: "1px solid rgba(117,0,242,0.1)" }}
       >
-        © 2026 SonaVerse · sonaverse.com
+        <div className="mx-auto max-w-5xl flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          <span>&copy; 2026 SonaVerse</span>
+          <div className="flex gap-6 text-xs" style={{ color: "#5a5470" }}>
+            <a href="#" className="hover:text-[#9490a8] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#9490a8] transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-[#9490a8] transition-colors">Contact</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
